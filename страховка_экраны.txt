@@ -1,0 +1,273 @@
+Каждый экран будет или отдельным файлом или отдельным сценарием в админке
+
+ChooseInsuranceType // экран выбора типа страховки
+  #title: Выберите тип страховки
+  #hbox
+    button: Оставить заявку ОСАГО\КАСКО
+      .click: () ->
+        screen.next({type: 'request'})
+    button: Покупка ОСАГО
+      .click: () ->
+        screen.next({type: 'buy_osago'})
+    button: Оплата рассрочки КАСКО
+      .click: () ->
+        screen.next({type: 'pay_casco'})
+
+  center
+    button: Отмена
+      .click: () ->
+        screen.back()
+
+OSAGO_personal_data_screen // экран заполнения фио, его скорее всего стандартизируем
+  #title: Заполните личные данные
+  form form1
+    input name: Имя
+      type: text
+      keyboard: cyrilic
+    input surname: Фамилия
+      type: text
+      keyboard: cyrilic
+    input midname: Отчество
+      type: text
+      keyboard: cyrilic
+
+  center
+    button: Далее
+      .click: ()->
+        store(form1.serizalize())
+        screen.next('OSAGO_reg_place_screen')
+    button: Отмена
+      .click: () ->
+        screen.back()
+
+
+OSAGO_reg_place_screen // экран про место регистрации
+  #title: Место регистрации
+    input place: Место регистрации
+      values: // тут можно указать готовый словарь всех российских городов\областей, что-то типа db('location'), а можно перечислить вот так доступные
+        msk: Москва
+        mskobl: Московская область
+      type: filteredEnum
+      keyboard: cyrilic
+
+  center
+    button: Далее
+      .click: ()->
+        store(form1.serizalize())
+        screen.next('OSAGO_car_info')
+    button: Отмена
+      .click: () ->
+        screen.back()
+
+OSAGO_car_info
+  #title: Место регистрации
+    input year: Год выпуска
+      type: year
+      keyboard: year
+      max: date.get('year')
+      min: date.get('year') - 6
+      afterMin: 
+        older: Старше
+    input brand: Марка автомобиля
+      values:
+        alfa_romeo: {name: 'Alfa Romeo', models: {
+            mito: {name: 'MiTo', formfactors: [
+              {name: '2.4 i (133.00 л.с.)'} // вот это надо указать для всех машин, в черновике не стал парсить все варианты
+            ]},
+            159: {name: '159'},
+            giulietta: {name: 'Giulietta'}
+          }}
+        audi: {name: 'Audi', models: [
+            a1: {name: 'A1'},
+            a3: {name: 'A3'},
+            a4: {name: 'A4'},
+            a4_allroad_quattro: {name: 'A4 allroad quattro'},
+            a5: {name: 'A5'},
+            a6: {name: 'A6'},
+            a6_allroad_quattro: {name: 'A6 allroad quattro'},
+            a7: {name: 'A7'},
+            a8: {name: 'A8'},
+            a8_l: {name: 'A8 L'},
+            q3: {name: 'Q3'},
+            q5: {name: 'Q5'},
+            q7: {name: 'Q7'},
+            r8: {name: 'R8'},
+            rs_3: {name: 'RS 3'},
+            rs_4: {name: 'RS 4'},
+            rs_5: {name: 'RS 5'},
+            rs_6: {name: 'RS 6'},
+            rs_q3: {name: 'RS Q3'},
+            rs7: {name: 'RS7'},
+            s3: {name: 'S3'},
+            s4: {name: 'S4'},
+            s5: {name: 'S5'},
+            s6: {name: 'S6'},
+            s7: {name: 'S7'},
+            s8: {name: 'S8'},
+            sq5: {name: 'SQ5'},
+            tt: {name: 'TT'},
+            tt_rs: {name: 'TT RS'},
+            tts: {name: 'TTS'}
+          ]}
+        ...... // ещё 100500 произодителей машин
+        ......
+        vaz: {name: 'ВАЗ', group: 'Отечественные автомобили', models: [
+            1117_kalina: {name: '1117 Kalina'},
+            11186: {name: '11186'},
+            1119_kalina: {name: '1119 Kalina'},
+            21074: {name: '21074'},
+            2113: {name: '2113'},
+            2114: {name: '2114'},
+            2115: {name: '2115'},
+            21214_niva: {name: '21214 Niva'},
+            21310_niva: {name: '21310 Niva'},
+            2170_priora: {name: '2170 Priora'},
+            2171_priora: {name: '2171 Priora'},
+            2172_priora: {name: '2172 Priora'},
+            2190_granta: {name: '2190 Granta'},
+            219020_granta: {name: '219020 Granta'},
+            2191_granta: {name: '2191 Granta'},
+            2192_kalina: {name: '2192 Kalina'},
+            2194_kalina: {name: '2194 Kalina'},
+            largus: {name: 'Largus'}
+          ]}
+        gaz: {name: 'ГАЗ', group: 'Отечественные автомобили', models: [
+            2705: {name: '2705'}
+          ]}
+      type: filteredEnum
+      keyboard: english\cyrilic
+      group: item.group || item.name.substr(0,1) // если указана группа - берём её, если не - первую букву
+      sort: alfabet(item.name)
+      .change: ()->
+        model.show()
+
+    input model: Модель машины
+      hidden: true
+      values: brand.value.models
+      sort: alfabet(item.name)
+      keyboard: english\cyrilic
+      .change: ()->
+        formfactor.show()
+
+    input formfactor: Тип кузова
+      hidden: true
+      values: model.value.formfactors // каждой модели надо указать возможные кузовы, или написать любую другую логику
+      sort: alfabet(item.name)
+      .change: ()->
+        next.show()
+
+    input formfactor: Тип кузова
+      hidden: true
+      values: model.value.formfactors // каждой модели надо указать возможные кузовы, или написать любую другую логику
+      sort: alfabet(item.name)
+      .change: ()->
+        next.show()
+
+  center
+    button next: Далее
+      .click: ()->
+        store({
+          year: form1.year.value,
+          brand: brand.value.key,
+          model: model.value.key
+          formfactor: formfactor.value.name,
+        })
+        screen.next('OSAGO_car_price')
+    button: Отмена
+      .click: () ->
+        screen.back()
+
+
+OSAGO_car_price // экран про цену машины
+  #title: Оцените текущую стоимость машины
+    input currentPrice: Текущая стоимость
+      type: price // да, мы дадим кучу стандартных полей для удобства
+      keyboard: number
+
+  center
+    button: Далее
+      .click: ()->
+        store({currentPrice: currentPrice.value})
+        screen.next('OSAGO_client_info')
+    button: Отмена
+      .click: () ->
+        screen.back()
+
+
+OSAGO_client_info // стаж
+  #title: Информация о водителе
+  form form1
+    input age: Возраст водителя (полных лет)
+      type: age
+      keyboard: number
+
+    input drive_years: Стаж (полных лет)
+      type: number
+      keyboard: number
+      max: age.value - 14
+      min: 0
+      default: 0
+
+  center
+    button: Далее
+      .click: ()->
+        store(form1.serialize())
+        screen.next('EnterPhoneNumber', 'OSAGO_agreement') // комбо - screen.next() в форме EnterPhoneNumber передаст управление на OSAGO_agreement
+    button: Отмена
+      .click: () ->
+        screen.back()        
+
+OSAGO_agreement // соглашение
+  #title: Соглашение о предоставлении услуг
+  #longText:
+    Настоящим даю согласие на обработку моих персональных данных и подтверждаю, 
+    что застрахованное ТС не эксплуатируется в режиме такси, проката либо 
+    городского пассажирского транспорта, не сдается в аренду, не используется в 
+    режиме «тест-драйв» (для проведения пробных поездок с целью оценки ходовых 
+    качеств ТС и общих потребительских свойств). Подтверждаю, что в момент 
+    заключения договора не отношусь к категории ИПДЛ/РПДЛ.
+  input: Согласен
+    type: checkbox
+    .change: ()->
+      next[this.value?'show':'hide']()
+  center
+    button next: Далее
+      hidden: true
+      .click: ()->
+        store({agreement: true});
+        query('getPrice', store.serialize(), function(value){ // если отвалилось на валидации, то происходит переход на экран с невалидными данными (запоминаем какой шаг установил какие переменные)
+          store({$PRICE: value});
+          screen.next();
+        })
+    button: Отмена
+      .click: () ->
+        screen.back()        
+    
+
+ CASCO_user_info // экран данных клиента каско
+   #title: Введите ваш очень уникальный номер клиента
+   input client_id: Номер клиента
+     type: number
+     keyboard: number
+     validate: this.value.length > 10
+     .valid: (valid)->
+       next[valid? 'show' :'hide']()
+
+   center
+    button next: Далее
+      hidden: true
+      .click: ()->
+        query('getUserInfo', {id: client_id.value} function(data){
+          if(data){
+            store({
+              $doubleAuthorizePhone: data.phone
+              $PRICE: data.price
+            });
+
+            screen.next('DoubleAuthorize')
+          }else{
+            dialog.error('Клиент с таким номером не найден');
+          }          
+          
+        })
+        

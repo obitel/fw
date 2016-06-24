@@ -1,0 +1,25 @@
+Сценарий оплаты телефона:
+  scenario // волшебный компонент сценариев. Испоняет шаг и ждёт пока в экране будет вызван мето screen.next() или .back()
+    EnterPhoneNumber // на выходе этого шага получаем phone, operator
+    PayMoney // на выходе - сумма
+    Proceed // показываем успех, ошибки (сообщение)
+
+Сценарий оплаты страховки (брал калькулятор тиникова за образец осаго)
+  scenario
+    ChooseInsuranceType // кастомный шаблон о трёх кнопках
+    if type == 'request'
+      EnterPhoneNumber // Тот же шаблон что и у оплаты телефона
+      query('callback', store.serialize())
+    else if type == 'buy_osago'
+      OSAGO_data_screen // этот экран сам вызывает другие экраны до наступления screen.next()
+      PayMoney
+      DeliveryAddress
+      query('buy_osago', store.serialize())
+    else if type == 'pay_casco'
+      CASCO_user_info
+      PayMoney
+      query('pay_casco', store.serialize())
+
+
+Пояснение:
+  query - вызов сценария на сервере. В процессе вызова сервера киви расшифровывают пришедшие данные и могут пнуть сервер конкретного клиента, который обрабатывает данные, послать email или произвести любое другое действие

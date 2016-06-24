@@ -1,0 +1,84 @@
+phoneInput // даём из коробки как готовый компонент
+  #icon.{{operator}}
+  input
+    type: number
+    placeholder: (XXX) XXX-XX-XX
+    .change: (value)->
+      this.ctx.set('operator', db('def').get(value).operator || 'unknown');
+
+
+
+EnterPhoneNumber: // экран "введите номер"
+  center
+    #title: Введите номер телефона
+    #phoneInput phone // инпут телефона с именем phone
+      .valid: (status)->
+        next.set('enabled', status) // когда телефон валиден - активируем кнопку "далее", иначе деактивируем
+
+    #keyboard
+      type: number
+
+    #hbox
+      button: Назад
+      	.click: () ->
+      	  screen.back()
+      button next: Далее
+        enabled: false
+        .click: ()->
+          store({ 
+            operator: phone.get('operator'),
+            phone: phone.get('phone')
+          });
+          screen.next(); // переходим на экран приёма денег
+
+
+moneyInput: // компонент работы с купюроприёмником. даём из коробки
+  returnCount: 2
+  .init: ()->
+    store({
+      amount: 0,
+      billCount: 0,
+      canReturn: this.returnCount
+    });
+  .income: (amount)->
+    store({amount: store('amount') + amount});
+    store({billCount: store('billCount')+1});
+    var count = this.returnCount - store('billCount');
+    store({canReturn: count > 0 ? count: false})
+
+
+PayMoney: // экран "внесите деньги". Дадим его готовым
+  #hardware money // у этого компонента нет UI, он - компонент приёма денег, у него есть имя и только читаемое значение количества внесённых средств
+    type: moneyInput
+    .canReturn: (can)->
+      cancel[can ? 'show' : 'hide']();
+
+  center
+    #title: Внесите деньги
+
+    if $PRICE
+      #subtitle: Необходимая сумма: {{$PRICE}}
+
+    #subTitle: Внесённая сумма
+      div.label: {{amount}}
+
+    if canReturn
+      #subTitle: Вы можете сделать возврат {{canReturn}} {{Plural(canReturn, ['купюры', 'купюр','купюр'])}}
+
+    if $PRICE
+      #subtitle: Осталось внести: {{$PRICE-amount}}
+
+    #subTitle: Комиссия
+      #comission
+        cfg: {{comission.get}}
+    #hbox
+      button: Назад
+        .click: ()->
+          screen.prev();
+      button next: Далее
+      	.click: ()->
+          screen.next();
+      button cancel: Вернуть средства
+        .click: ()->
+          money.cashBack() // дёргаем метод выдачи наличных
+// тут ещё напилим логику лишних денег, если надо внести 4300, а внесли 5к (кинуть на киви кошелёк, например, или оплатить ещё услугу)
