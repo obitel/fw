@@ -10,12 +10,13 @@ export function CTA() {
           <div>
             <h3 className="text-2xl font-semibold md:text-3xl">Готовы ускорить выпуск интерфейсов?</h3>
             <p className="mt-3 text-slate-200">
-              Запросите демо, чтобы увидеть, как сценарии, компоненты и тесты живут в единой среде.
+              Запросите демо, получите доступ к библиотеке шаблонов и CLI прототипирования.
             </p>
           </div>
           <div className="flex flex-col gap-3">
             <Button size="lg">Запросить демонстрацию</Button>
             <Button size="lg" variant="secondary">Скачать one-pager</Button>
+            <Button size="lg" variant="ghost">Открыть CLI</Button>
           </div>
         </div>
       </Card>

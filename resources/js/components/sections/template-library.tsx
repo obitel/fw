@@ -18,6 +18,10 @@ const templates = [
     title: "Customer support",
     description: "Интерфейс для терминала с быстрым доступом к инструкциям и чату.",
   },
+  {
+    title: "Compliance banking",
+    description: "Регламентированный flow с audit-log, ролями и контролем действий.",
+  },
 ];
 
 export function TemplateLibrary() {

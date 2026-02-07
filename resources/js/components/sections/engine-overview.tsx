@@ -3,6 +3,10 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 
 const engineBlocks = [
   {
+    title: "Scenario Engine",
+    description: "Выполняет условия, ветвления и переходы между экранами в реальном времени.",
+  },
+  {
     title: "State Engine",
     description: "Фиксирует начальные и конечные состояния экранов и преобразует их в автотесты.",
   },
