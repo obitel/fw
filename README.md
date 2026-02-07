@@ -1,7 +1,8 @@
 # FW Visual Flow Studio
 
 Визуальная среда разработки интерфейсов, где сценарии, компоненты и тесты живут в единой системе.
-Лендинг и документация реализованы на **Laravel + React + Vite + Tailwind + shadcn/ui**.
+Лендинг и документация реализованы на **Laravel + React + Vite + Tailwind + shadcn/ui**. Документация
+подготовлена для запуска через **Vocs**.
 
 ## Быстрый старт
 ```bash
@@ -10,8 +11,7 @@ npm run dev
 ```
 
 ## Документация
-- [Обзор и инструкции](./docs/README.md)
+- [Обзор и инструкции](./docs/index.md)
 - [Архитектура](./docs/architecture.md)
 - [Компоненты](./docs/components.md)
 - [Сценарии](./docs/scenarios.md)
-
