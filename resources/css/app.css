@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-base text-slate-100 antialiased;
+}
+
+.container-x {
+  @apply mx-auto w-full max-w-6xl px-6;
+}
+
+.grid-dots {
+  background-image: radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.15) 1px, transparent 0);
+  background-size: 32px 32px;
+}
