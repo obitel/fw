@@ -3,31 +3,11 @@ import ReactDOM from "react-dom/client";
 
 import "../css/app.css";
 
-import { Hero } from "@/components/sections/hero";
-import { EditorShowcase } from "@/components/sections/editor-showcase";
-import { FeatureGrid } from "@/components/sections/feature-grid";
-import { ComponentShowcase } from "@/components/sections/component-showcase";
-import { EngineOverview } from "@/components/sections/engine-overview";
-import { SystemOverview } from "@/components/sections/system-overview";
-import { TemplateLibrary } from "@/components/sections/template-library";
-import { ScenarioFlow } from "@/components/sections/scenario-flow";
-import { CTA } from "@/components/sections/cta";
-import { Footer } from "@/components/sections/footer";
+import { StudioApp } from "@/components/app/studio-app";
 
 function App() {
   return (
-    <div className="min-h-screen bg-base text-white">
-      <Hero />
-      <EditorShowcase />
-      <FeatureGrid />
-      <ComponentShowcase />
-      <EngineOverview />
-      <SystemOverview />
-      <TemplateLibrary />
-      <ScenarioFlow />
-      <CTA />
-      <Footer />
-    </div>
+    <StudioApp />
   );
 }
 
