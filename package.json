@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "fw:cli": "node tools/fw-cli.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",

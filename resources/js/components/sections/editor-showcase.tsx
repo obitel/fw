@@ -15,6 +15,8 @@ const components = [
   { name: "moneyInput", type: "Hardware" },
   { name: "scenario", type: "Flow" },
   { name: "osagoWizard", type: "Template" },
+  { name: "eventRouter", type: "Integration" },
+  { name: "testRecorder", type: "Automation" },
 ];
 
 export function EditorShowcase() {

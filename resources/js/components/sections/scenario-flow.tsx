@@ -13,6 +13,11 @@ const flows = [
     description: "Гибкая ветка сценариев с разными путями и серверными запросами.",
   },
   {
+    title: "Scenario Engine + Test Recorder",
+    steps: ["Record", "Validate", "Publish"],
+    description: "Сценарии записываются как тесты и прогоняются в CI перед публикацией.",
+  },
+  {
     title: "Кастомный flow",
     steps: ["Scene A", "Scene B", "Scene C"],
     description: "Собирайте свои цепочки и подключайте события к кнопкам, клавишам и датчикам.",
